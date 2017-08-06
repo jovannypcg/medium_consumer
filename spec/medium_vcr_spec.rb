@@ -31,4 +31,25 @@ describe Medium do
       end
     end
   end
+
+  context '#publications' do
+    it 'gets user publications' do
+      VCR.use_cassette 'publications' do
+        pubs = client.publications(user_info["id"])
+
+        expect(pubs).not_to be_empty
+      end
+    end
+
+    let(:expected_titles) { [ "Creatomic", "Tiny Tech Tales"] }
+
+    it 'retrieves title of publications' do
+      VCR.use_cassette 'publications' do
+        pubs = client.publications(user_info["id"])
+        titles = client.titles(pubs)
+
+        expect(titles).to include(*expected_titles)
+      end
+    end
+  end
 end
